@@ -1,1 +1,5 @@
 streamlit
+pandas
+nest-asyncio
+playwright
+geopy

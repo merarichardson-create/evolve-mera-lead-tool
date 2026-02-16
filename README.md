@@ -1,19 +1,69 @@
-# 🎈 Blank app template
+# � Evolve Mera Lead Generation Tool
 
-A simple Streamlit app template for you to modify!
+An automated lead scanner for identifying property owners through Airbnb host profiles.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+## Features
 
-### How to run it on your own machine
+✨ **Smart Lead Scanning** - Analyzes host bios for ownership indicators
+📍 **Geolocation Mapping** - Extracts precise property addresses and coordinates
+🗺️ **Google Maps Integration** - Direct links to property locations
+📊 **Data Export** - Download leads as CSV or Excel
+⚡ **Async Processing** - Fast, efficient multi-threaded scanning
 
-1. Install the requirements
+## Requirements
 
+- Python 3.8+
+- Playwright (with Chromium browser)
+- Pandas for data processing
+- Geopy for geocoding
+
+## Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/merarichardson-create/evolve-mera-lead-tool.git
+   cd evolve-mera-lead-tool
    ```
-   $ pip install -r requirements.txt
+
+2. Install dependencies
+   ```bash
+   pip install -r requirements.txt
    ```
 
-2. Run the app
+3. Install Playwright browser
+   ```bash
+   playwright install chromium
+   ```
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+## Usage
+
+Run the Streamlit app:
+```bash
+streamlit run streamlit_app.py
+```
+
+The app will open in your browser. Enter Airbnb host profile URLs and click "Scan Leads" to begin.
+
+### How It Works
+
+1. **Input URLs** - Paste Airbnb host profile links
+2. **Bio Scanning** - Checks for ownership keywords
+3. **Property Detection** - Extracts associated property listings
+4. **Location Mapping** - Identifies exact addresses via geolocation
+5. **Export Results** - Download lead data in your preferred format
+
+## Example URLs
+
+```
+https://www.airbnb.com/users/show/123456789
+https://www.airbnb.com/users/show/987654321
+```
+
+## Keywords Detected
+
+The scanner identifies owners based on these keywords in their bio:
+- "my home", "our home", "owner", "we own", "my villa", "my business", "local", "own and operate"
+
+## License
+
+See LICENSE file for details.
