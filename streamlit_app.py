@@ -1,5 +1,6 @@
 import streamlit as st
 import asyncio
+import io
 from lead_scanner import scan_leads
 
 st.set_page_config(page_title="Lead Scanner", layout="wide")
@@ -54,10 +55,12 @@ if scan_button:
                         mime="text/csv"
                     )
                 with col2:
-                    xlsx = results_df.to_excel(index=False, engine='openpyxl')
+                    excel_buffer = io.BytesIO()
+                    results_df.to_excel(excel_buffer, index=False, engine='openpyxl')
+                    excel_buffer.seek(0)
                     st.download_button(
                         label="📥 Download Excel",
-                        data=xlsx,
+                        data=excel_buffer.getvalue(),
                         file_name="leads.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )

@@ -3,3 +3,4 @@ pandas
 nest-asyncio
 playwright
 geopy
+openpyxl
