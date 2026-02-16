@@ -1,6 +1,7 @@
 import streamlit as st
 import asyncio
 import io
+import playwright_setup  # Auto-install Playwright on first run
 from lead_scanner import scan_leads
 
 st.set_page_config(page_title="Lead Scanner", layout="wide")
