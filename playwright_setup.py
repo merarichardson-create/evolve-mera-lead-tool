@@ -1,17 +1,46 @@
-import subprocess
+import glob
 import os
+import subprocess
 import sys
 
-def ensure_playwright_installed():
-    """Ensure Playwright browsers are installed."""
+
+_SETUP_DONE = False
+
+
+def _playwright_browser_present() -> bool:
+    """Return True when a Chromium browser binary is already installed."""
+    browser_globs = [
+        "~/.cache/ms-playwright/chromium-*/chrome-linux/chrome",
+        "~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome",
+        "~/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell",
+    ]
+    for pattern in browser_globs:
+        if glob.glob(os.path.expanduser(pattern)):
+            return True
+    return False
+
+def ensure_playwright_installed() -> bool:
+    """Ensure Playwright Chromium is installed without re-running heavy setup."""
+    global _SETUP_DONE
+    if _SETUP_DONE:
+        return True
+
     try:
-        from playwright.async_api import async_playwright
-        # Try to access the browser to see if it's installed
-        chromium_path = os.path.expanduser("~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome")
-        if not any(os.path.exists(p) for p in [os.path.expanduser("~/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell"), os.path.expanduser("~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome")]):
-            print("Installing Playwright browsers...")
-            subprocess.check_call([sys.executable, "-m", "playwright", "install", "chromium"])
+        # Validate Playwright import first; this also avoids noisy setup when package is missing.
+        import playwright  # noqa: F401
+
+        if not _playwright_browser_present():
+            print("Installing Playwright Chromium browser...")
+            env = os.environ.copy()
+            env["CI"] = "1"
+            env["DEBIAN_FRONTEND"] = "noninteractive"
+            subprocess.check_call(
+                [sys.executable, "-m", "playwright", "install", "chromium"],
+                env=env,
+            )
     except Exception as e:
         print(f"Warning: Could not install Playwright: {e}")
-
-ensure_playwright_installed()
+        return False
+    finally:
+        _SETUP_DONE = True
+    return True
